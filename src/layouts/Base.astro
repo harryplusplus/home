@@ -1,5 +1,6 @@
 ---
-
+import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
 ---
 
 <html lang="en">
@@ -9,6 +10,10 @@
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>Harry H. Kim | Software Engineer</title>
+    <Analytics />
+    <SpeedInsights />
   </head>
-  <body> </body>
+  <body>
+    <slot />
+  </body>
 </html>
