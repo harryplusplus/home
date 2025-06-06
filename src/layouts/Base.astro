@@ -1,6 +1,7 @@
 ---
 import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
+import { Font } from "astro:assets";
 
 type Props = {
   frontmatter: { title: string };
@@ -16,6 +17,7 @@ type Props = {
     <title>
       {Astro.props.frontmatter.title || "Harry H. Kim | Software Engineer"}
     </title>
+    <Font cssVariable="--font-eb-garamond" preload />
     <Analytics />
     <SpeedInsights />
   </head>
@@ -36,5 +38,6 @@ type Props = {
 <style>
   body {
     background-color: #fdf6e3;
+    font-family: var(--font-eb-garamond);
   }
 </style>
