@@ -1,5 +1,10 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import mdx from "@astrojs/mdx";
+import vercel from "@astrojs/vercel";
+import { defineConfig } from "astro/config";
 
 // https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  integrations: [mdx()],
+  adapter: vercel(),
+});
