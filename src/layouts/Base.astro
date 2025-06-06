@@ -1,6 +1,10 @@
 ---
 import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
+
+type Props = {
+  frontmatter: { title: string };
+};
 ---
 
 <html lang="en">
@@ -9,11 +13,22 @@ import SpeedInsights from "@vercel/speed-insights/astro";
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Harry H. Kim | Software Engineer</title>
+    <title>
+      {Astro.props.frontmatter.title || "Harry H. Kim | Software Engineer"}
+    </title>
     <Analytics />
     <SpeedInsights />
   </head>
   <body>
-    <slot />
+    <header>
+      <nav>
+        <a href="/">Blog</a>
+        <a href="/about">About</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer></footer>
   </body>
 </html>
