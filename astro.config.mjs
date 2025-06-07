@@ -13,6 +13,7 @@ export default defineConfig({
         provider: fontProviders.google(),
         name: "EB Garamond",
         cssVariable: "--font-eb-garamond",
+        weights: [400, 700],
       },
     ],
   },

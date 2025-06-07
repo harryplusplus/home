@@ -9,13 +9,50 @@ const sortedPosts = allPosts.sort(
 ---
 
 <BaseLayout title="Blog">
-  <ul>
+  <section>
     {
       sortedPosts.map((post) => (
-        <li>
-          <a href={`/posts/${post.id}`}>{post.data.title}</a>
-        </li>
+        <>
+          <article>
+            <h2>{post.data.title}</h2>
+            <p>
+              <small>
+                {post.data.pubDate.toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </small>
+            </p>
+            <h3>{post.data.description}</h3>
+            <a href={`/posts/${post.id}`}>Read More</a>
+          </article>
+          <hr />
+        </>
       ))
     }
-  </ul>
+  </section>
 </BaseLayout>
+
+<style>
+  section {
+    margin-top: 20px;
+  }
+
+  h2 {
+    margin: auto;
+  }
+
+  p {
+    margin: auto;
+  }
+
+  h3 {
+    margin: auto;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid rgba(200, 200, 200, 0.3);
+  }
+</style>
