@@ -14,18 +14,19 @@ const sortedPosts = allPosts.sort(
       sortedPosts.map((post) => (
         <>
           <article>
-            <h2>{post.data.title}</h2>
-            <p>
-              <small>
-                {post.data.pubDate.toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </small>
-            </p>
-            <h3>{post.data.description}</h3>
-            <a href={`/posts/${post.id}`}>Read More</a>
+            <a href={`/posts/${post.id}`}>
+              <h2>{post.data.title}</h2>
+              <p>
+                <small>
+                  {post.data.pubDate.toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </small>
+              </p>
+              <h3>{post.data.description}</h3>
+            </a>
           </article>
           <hr />
         </>
@@ -39,6 +40,16 @@ const sortedPosts = allPosts.sort(
     margin-top: 20px;
   }
 
+  article:hover h2 {
+    text-decoration-line: underline;
+  }
+
+  a {
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+
   h2 {
     margin: auto;
   }
@@ -49,6 +60,7 @@ const sortedPosts = allPosts.sort(
 
   h3 {
     margin: auto;
+    font-weight: normal;
   }
 
   hr {
