@@ -1,5 +1,8 @@
 ---
-const currentPath = Astro.url.pathname;
+let currentPath = Astro.url.pathname;
+if (currentPath.endsWith("/") && currentPath !== "/") {
+  currentPath = currentPath.slice(0, -1);
+}
 ---
 
 <header>
