@@ -38,13 +38,13 @@
     "editor.tabSize": 2
   },
   "[markdown]": {
-    "editor.defaultFormatter": "unifiedjs.vscode-mdx",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.insertSpaces": true,
     "editor.tabSize": 2
   },
   "[mdx]": {
-    "editor.defaultFormatter": "unifiedjs.vscode-mdx",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.insertSpaces": true,
     "editor.tabSize": 2
