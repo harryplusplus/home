@@ -1,3 +1,27 @@
 ---
-
+const currentPath = Astro.url.pathname;
 ---
+
+<header>
+  <nav>
+    <a href="/" class:list={{ active: currentPath === "/" }}>Blog</a>
+    <a href="/about" class:list={{ active: currentPath === "/about" }}>About</a>
+  </nav>
+</header>
+
+<style>
+  nav a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: inherit;
+    padding-bottom: 3px;
+    border-bottom: 2px solid transparent;
+  }
+
+  nav a:hover {
+    border-color: #000;
+  }
+  nav a.active {
+    border-color: #000;
+  }
+</style>
