@@ -4,8 +4,10 @@ import SpeedInsights from "@vercel/speed-insights/astro";
 import { Font } from "astro:assets";
 
 type Props = {
-  frontmatter: { title: string };
+  title: string;
 };
+
+const { title } = Astro.props;
 ---
 
 <html lang="en">
@@ -15,7 +17,7 @@ type Props = {
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <title>
-      {Astro.props.frontmatter.title || "Harry H. Kim | Software Engineer"}
+      {`${title} | Harry H. Kim`}
     </title>
     <Font cssVariable="--font-eb-garamond" preload />
     <Analytics />
