@@ -15,7 +15,7 @@ const sortedPosts = allPosts.sort(
         <>
           <article>
             <a href={`/posts/${post.id}`}>
-              <h2>{post.data.title}</h2>
+              <h3>{post.data.title}</h3>
               <p>
                 <small>
                   {post.data.pubDate.toLocaleDateString(undefined, {
@@ -25,7 +25,6 @@ const sortedPosts = allPosts.sort(
                   })}
                 </small>
               </p>
-              <h3>{post.data.description}</h3>
             </a>
           </article>
           <hr />
@@ -40,7 +39,7 @@ const sortedPosts = allPosts.sort(
     margin-top: 20px;
   }
 
-  article:hover h2 {
+  article:hover h3 {
     text-decoration-line: underline;
   }
 
@@ -50,17 +49,12 @@ const sortedPosts = allPosts.sort(
     color: inherit;
   }
 
-  h2 {
-    margin: auto;
-  }
-
   p {
     margin: auto;
   }
 
   h3 {
     margin: auto;
-    font-weight: normal;
   }
 
   hr {
