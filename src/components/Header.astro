@@ -17,10 +17,16 @@ const currentPath = Astro.url.pathname;
     border-bottom: 2px solid transparent;
   }
 
-  nav a:hover {
-    border-color: #000;
+  nav a:last-child {
+    margin-right: 0;
   }
+
+  nav a:hover {
+    text-decoration: underline;
+  }
+
+  /* ★★★ 활성화된 링크에만 밑줄 표시 ★★★ */
   nav a.active {
-    border-color: #000;
+    text-decoration: underline;
   }
 </style>
