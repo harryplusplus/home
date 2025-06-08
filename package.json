@@ -13,6 +13,7 @@
     "@astrojs/vercel": "8.1.5",
     "@vercel/analytics": "1.5.0",
     "@vercel/speed-insights": "1.2.0",
-    "astro": "5.9.0"
+    "astro": "5.9.0",
+    "remark-toc": "9.0.0"
   }
 }
