@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const allProjects = await getCollection("projects");
+const sortedProjects = allProjects.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<BaseLayout title="Projects">
+  <section>
+    {
+      sortedProjects.map((post) => (
+        <>
+          <article>
+            <a href={`/projects/${post.id}`}>
+              <h3>{post.data.title}</h3>
+              <p>
+                <small>
+                  {post.data.pubDate.toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </small>
+              </p>
+            </a>
+          </article>
+          <hr />
+        </>
+      ))
+    }
+  </section>
+</BaseLayout>

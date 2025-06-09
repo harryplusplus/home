@@ -8,6 +8,10 @@ if (currentPath.endsWith("/") && currentPath !== "/") {
 <header>
   <nav>
     <a href="/" class:list={{ active: currentPath === "/" }}>Blog</a>
+    <a
+      href="/projects"
+      class:list={{ active: currentPath.startsWith("/projects") }}>Projects</a
+    >
     <a href="/about" class:list={{ active: currentPath === "/about" }}>About</a>
   </nav>
 </header>
