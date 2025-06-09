@@ -1,0 +1,73 @@
+---
+import type { DataEntryMap } from "astro:content";
+import { getCollection } from "astro:content";
+
+type Props = {
+  collection: keyof DataEntryMap;
+};
+
+const { collection } = Astro.props;
+
+const articles = await getCollection(collection);
+const sortedArticles = articles.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<section>
+  {
+    sortedArticles.map((article) => (
+      <>
+        <article>
+          <a href={`/${collection}/${article.id}`}>
+            <h3>{article.data.title}</h3>
+            <p>
+              <small>
+                {article.data.pubDate.toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </small>
+            </p>
+            {article.data.description ? (
+              <p>{article.data.description}</p>
+            ) : (
+              <p />
+            )}
+          </a>
+        </article>
+        <hr />
+      </>
+    ))
+  }
+</section>
+
+<style>
+  section {
+    margin-top: 20px;
+  }
+
+  article:hover h3 {
+    text-decoration-line: underline;
+  }
+
+  a {
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+
+  p {
+    margin: auto;
+  }
+
+  h3 {
+    margin: auto;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid rgba(200, 200, 200, 0.5);
+  }
+</style>

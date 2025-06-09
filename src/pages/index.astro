@@ -1,64 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
-
-const allPosts = await getCollection("blog");
-const sortedPosts = allPosts.sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
-);
+import Articles from "../components/Articles.astro";
 ---
 
 <BaseLayout title="Blog">
-  <section>
-    {
-      sortedPosts.map((post) => (
-        <>
-          <article>
-            <a href={`/posts/${post.id}`}>
-              <h3>{post.data.title}</h3>
-              <p>
-                <small>
-                  {post.data.pubDate.toLocaleDateString(undefined, {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </small>
-              </p>
-            </a>
-          </article>
-          <hr />
-        </>
-      ))
-    }
-  </section>
+  <Articles collection="posts" />
 </BaseLayout>
-
-<style>
-  section {
-    margin-top: 20px;
-  }
-
-  article:hover h3 {
-    text-decoration-line: underline;
-  }
-
-  a {
-    text-decoration: none;
-    display: block;
-    color: inherit;
-  }
-
-  p {
-    margin: auto;
-  }
-
-  h3 {
-    margin: auto;
-  }
-
-  hr {
-    border: none;
-    border-top: 1px solid rgba(200, 200, 200, 0.5);
-  }
-</style>
