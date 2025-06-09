@@ -1,5 +1,6 @@
 // @ts-check
 import mdx from "@astrojs/mdx";
+import react from "@astrojs/react";
 import vercel from "@astrojs/vercel";
 import { defineConfig, fontProviders } from "astro/config";
 import remarkToc from "remark-toc";
@@ -10,6 +11,7 @@ export default defineConfig({
     mdx({
       remarkPlugins: [remarkToc],
     }),
+    react(),
   ],
   adapter: vercel(),
   experimental: {
