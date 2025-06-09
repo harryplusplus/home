@@ -16,25 +16,21 @@ const sortedArticles = articles.sort(
 
 <section>
   {
-    sortedArticles.map((article) => (
+    sortedArticles.map((x) => (
       <>
         <article>
-          <a href={`/${collection}/${article.id}`}>
-            <h3>{article.data.title}</h3>
+          <a href={`/${collection}/${x.id}`} class="article-link">
+            <h3>{x.data.title}</h3>
             <p>
               <small>
-                {article.data.pubDate.toLocaleDateString(undefined, {
+                {x.data.pubDate.toLocaleDateString(undefined, {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}
               </small>
             </p>
-            {article.data.description ? (
-              <p>{article.data.description}</p>
-            ) : (
-              <p />
-            )}
+            {x.data.description ? <p>{x.data.description}</p> : null}
           </a>
         </article>
         <hr />
@@ -52,7 +48,7 @@ const sortedArticles = articles.sort(
     text-decoration-line: underline;
   }
 
-  a {
+  .article-link {
     text-decoration: none;
     display: block;
     color: inherit;
