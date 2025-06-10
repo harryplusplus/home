@@ -14,7 +14,7 @@ An asynchronous, lock-free, multi-threaded, component-based modular server engin
 
 Duration: April 23, 2024 ~ May 5, 2024
 
-Github: [link](https://github.com/harryplusplus/kero-modular-server-engine)
+Github: [link](https://github.com/harryplusplus/images/kero-modular-server-engine)
 
 ## Core Values
 
@@ -35,7 +35,7 @@ Github: [link](https://github.com/harryplusplus/kero-modular-server-engine)
 
 ## Architecture
 
-![Architecture](/public/kero-modular-server-engine/architecture.webp)
+![Architecture](/images/kero-modular-server-engine/architecture.webp)
 
 The diagram above illustrates an example of the overall architecture of the server engine. It shows which modules each thread possesses within a single server process and how these modules relate to each other.  
 Blue represents modules within `kero/engine`, and purple represents only the ActorSystem communication structure among `kero/engine` modules.  
@@ -81,7 +81,7 @@ class Service {
 
 In the service's constructor, `ServiceKindIds` of dependent services are stored as a list. When the `Run` function of the `Runner` (hereinafter Runner) class is called, it traverses the dependency service graph by calling the `GetDependencyDeclarations()` method of the services it owns. The diagram below shows an example of inter-service dependency structure.
 
-![Service Traverse](/public/kero-modular-server-engine/service_traverse.png)
+![Service Traverse](/images/kero-modular-server-engine/service_traverse.png)
 
 - A depends on B and D.
 - B depends on C and D.
@@ -122,7 +122,7 @@ As a result, the Runner delegates the creation and access of dependent services,
 
 While the guaranteed initialization order of dependent services feature solved this problem, traversing the dependency service graph can lead to infinite recursion if a circular reference occurs. The diagram below shows an example of a circular reference.
 
-![Service Traverse Circular](/public/kero-modular-server-engine/service_traverse_circular.png)
+![Service Traverse Circular](/images/kero-modular-server-engine/service_traverse_circular.png)
 
 - A depends on B.
 - B depends on C.
@@ -153,7 +153,7 @@ In such cases, the user must resolve this circular reference between services. T
 
 First, split some of the functionality of the service where the cycle occurred. The diagram below shows an example of a solution using service splitting.
 
-![Service Traverse Circular Resolve](/public/kero-modular-server-engine/service_traverse_circular_resolve.png)
+![Service Traverse Circular Resolve](/images/kero-modular-server-engine/service_traverse_circular_resolve.png)
 
 - A depends on B.
 - B depends on C.
@@ -220,11 +220,11 @@ The Actor System is one of the inter-thread communication methods. The advantage
 
 #### Structure and Operating Principle
 
-![Actor System](/public/kero-modular-server-engine/actor_system.png)
+![Actor System](/images/kero-modular-server-engine/actor_system.png)
 
 The diagram above shows the relational structure between the Actor System and ActorService (hereinafter Actor Service). It consists of an Actor System thread and Runner threads. The Actor Service within the Runner thread was implemented as a Runner's service. The Actor System and Actor Service have a 1:N relationship.
 
-![Actor System SPSC](/public/kero-modular-server-engine/actor_system_spsc.png)
+![Actor System SPSC](/images/kero-modular-server-engine/actor_system_spsc.png)
 
 The diagram above illustrates the implementation using SPSC queues between the Actor Service and the Actor System. `Tx` -> `Rx` represents one SPSC queue. Communication between Actor Services occurs through SPSC queues mediated by the Actor System.
 
@@ -248,7 +248,7 @@ Therefore, I devised a method that can process logging asynchronously and non-bl
 
 #### Structure
 
-![Log](/public/kero-modular-server-engine/log.png)
+![Log](/images/kero-modular-server-engine/log.png)
 
 The diagram above shows the structure of the logging system. `LocalContext` (hereinafter Local Context) is the Tx of the SPSC queue in `thread local`. `GlobalContext` (hereinafter Global Context) is the set of Rxs of the SPSC queue.
 
@@ -355,7 +355,7 @@ By applying the parenthesis-matching and sliding window algorithms, I was able t
 
 ## Rock Paper Scissors Lizard Spock
 
-Github: [link](https://github.com/harryplusplus/kero-modular-server-engine/tree/main/examples/rock_paper_scissors_lizard_spock)
+Github: [link](https://github.com/harryplusplus/images/kero-modular-server-engine/tree/main/examples/rock_paper_scissors_lizard_spock)
 
 A console text input-based 1:1 matching multiplayer game project that was developed alongside the Kero Modular Server Engine.
 
@@ -438,7 +438,7 @@ If there are two or more sockets, they are unregistered to be moved to another t
 
 Then, the two sockets are passed to the battle thread with the fewest sockets, and a `battle_start` event is also sent. The diagram below illustrates the event flow between the battle thread and the lobby thread.
 
-![RPSLS](/public/kero-modular-server-engine/rpsls.png)
+![RPSLS](/images/kero-modular-server-engine/rpsls.png)
 
 The battle thread registers the sockets and sends the `battle_start` event to the players.
 
