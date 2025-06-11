@@ -81,7 +81,7 @@ class Service {
 
 In the service's constructor, `ServiceKindIds` of dependent services are stored as a list. When the `Run` function of the `Runner` (hereinafter Runner) class is called, it traverses the dependency service graph by calling the `GetDependencyDeclarations()` method of the services it owns. The diagram below shows an example of inter-service dependency structure.
 
-![Service Traverse](/images/kero-modular-server-engine/service_traverse.png)
+![Service Traverse](/images/kero-modular-server-engine/service-traverse.png)
 
 - A depends on B and D.
 - B depends on C and D.
@@ -122,7 +122,7 @@ As a result, the Runner delegates the creation and access of dependent services,
 
 While the guaranteed initialization order of dependent services feature solved this problem, traversing the dependency service graph can lead to infinite recursion if a circular reference occurs. The diagram below shows an example of a circular reference.
 
-![Service Traverse Circular](/images/kero-modular-server-engine/service_traverse_circular.png)
+![Service Traverse Circular](/images/kero-modular-server-engine/service-traverse-circular.png)
 
 - A depends on B.
 - B depends on C.
@@ -153,7 +153,7 @@ In such cases, the user must resolve this circular reference between services. T
 
 First, split some of the functionality of the service where the cycle occurred. The diagram below shows an example of a solution using service splitting.
 
-![Service Traverse Circular Resolve](/images/kero-modular-server-engine/service_traverse_circular_resolve.png)
+![Service Traverse Circular Resolve](/images/kero-modular-server-engine/service-traverse-circular-resolve.png)
 
 - A depends on B.
 - B depends on C.
@@ -220,11 +220,11 @@ The Actor System is one of the inter-thread communication methods. The advantage
 
 #### Structure and Operating Principle
 
-![Actor System](/images/kero-modular-server-engine/actor_system.png)
+![Actor System](/images/kero-modular-server-engine/actor-system.png)
 
 The diagram above shows the relational structure between the Actor System and ActorService (hereinafter Actor Service). It consists of an Actor System thread and Runner threads. The Actor Service within the Runner thread was implemented as a Runner's service. The Actor System and Actor Service have a 1:N relationship.
 
-![Actor System SPSC](/images/kero-modular-server-engine/actor_system_spsc.png)
+![Actor System SPSC](/images/kero-modular-server-engine/actor-system-spsc.png)
 
 The diagram above illustrates the implementation using SPSC queues between the Actor Service and the Actor System. `Tx` -> `Rx` represents one SPSC queue. Communication between Actor Services occurs through SPSC queues mediated by the Actor System.
 
