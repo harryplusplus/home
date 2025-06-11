@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Articles from "../components/Articles.astro";
+import Contact from "../components/Contact.mdx";
 ---
 
 <BaseLayout title="Home">
@@ -18,4 +19,6 @@ import Articles from "../components/Articles.astro";
   <br />
   <h1 id="projects">Projects</h1>
   <Articles collection="projects" />
+  <h1 id="Contact">Contact</h1>
+  <Contact />
 </BaseLayout>
