@@ -3,6 +3,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Articles from "../components/Articles.astro";
 ---
 
-<BaseLayout title="Blog">
+<BaseLayout title="Home">
+  <h1>It's a pleasure to welcome you to Harry's Home.</h1>
+  <h2>Blog</h2>
   <Articles collection="posts" />
+  <h2>Projects</h2>
+  <Articles collection="projects" />
 </BaseLayout>
