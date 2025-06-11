@@ -4,7 +4,7 @@ import Articles from "../components/Articles.astro";
 ---
 
 <BaseLayout title="Home">
-  <h1>About Harry H. Kim</h1>
+  <h1 id="about">About Harry H. Kim</h1>
   <p>
     Harry H. Kim (Hunhoe Kim / 김훈회) is a Software Engineer with 5 years of
     experience, passionate about web and cloud technologies. His software
@@ -13,9 +13,9 @@ import Articles from "../components/Articles.astro";
     backend systems.
   </p>
   <br />
-  <h1>Blog</h1>
+  <h1 id="blog">Blog</h1>
   <Articles collection="posts" />
   <br />
-  <h1>Projects</h1>
+  <h1 id="projects">Projects</h1>
   <Articles collection="projects" />
 </BaseLayout>
