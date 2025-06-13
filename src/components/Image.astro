@@ -1,0 +1,12 @@
+---
+import { Image as Base } from "astro:assets";
+
+type Props = {
+  src: ImageMetadata;
+  alt: string;
+};
+
+const { src, alt } = Astro.props;
+---
+
+<Base src={src} alt={alt} layout="constrained" } />
