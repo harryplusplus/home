@@ -4,7 +4,9 @@ pubDate: 2024-04-07
 description: "Kill Tree is a library and CLI tool designed to terminate a specified process and all its child processes recursively, operating independently of other commands like kill or taskkill."
 ---
 
-import Image from "../../components/Image";
+import Image from "@/components/Image.astro";
+import dependentsImage from "@/images/kill-tree/dependents.png";
+import downloadsImage from "@/images/kill-tree/downloads.png";
 
 # {frontmatter.title}
 
@@ -14,5 +16,5 @@ This library is published on [crates.io](https://crates.io/crates/kill_tree).
 
 This library has **3 dependent packages** and has achieved a total of **171K downloads**.
 
-<Image src="/images/kill-tree/dependents.png" alt="Dependents" />
-<Image src="/images/kill-tree/downloads.png" alt="Downloads" />
+<Image src={dependentsImage} />
+<Image src={downloadsImage} />

@@ -3,10 +3,16 @@ import { Image as Base } from "astro:assets";
 
 type Props = {
   src: ImageMetadata;
-  alt: string;
 };
 
-const { src, alt } = Astro.props;
+function getAltFromSrc(src: string): string {
+  const filenameWithExt = src.split("/").pop() || "";
+  const filename = filenameWithExt.split(".")[0] || "";
+  return filename;
+}
+
+const { src } = Astro.props;
+const alt = getAltFromSrc(src.src);
 ---
 
 <Base src={src} alt={alt} layout="constrained" } />

@@ -6,6 +6,13 @@ description: "Kero Modular Server Engine is an asynchronous, lock-free, multi-th
 
 import Image from "@/components/Image.astro";
 import architectureImage from "@/images/kero-modular-server-engine/architecture.webp";
+import serviceTraverseImage from "@/images/kero-modular-server-engine/service-traverse.png";
+import serviceTraverseCircularImage from "@/images/kero-modular-server-engine/service-traverse-circular.png";
+import serviceTraverseCircularResolve from "@/images/kero-modular-server-engine/service-traverse-circular-resolve.png";
+import actorSystemImage from "@/images/kero-modular-server-engine/actor-system.png";
+import actorSystemSpscImage from "@/images/kero-modular-server-engine/actor-system-spsc.png";
+import logImage from "@/images/kero-modular-server-engine/log.png";
+import rpslsImage from "@/images/kero-modular-server-engine/rpsls.png";
 
 # {frontmatter.title}
 
@@ -38,10 +45,7 @@ Github: [link](https://github.com/harryplusplus/kero-modular-server-engine)
 
 ## Architecture
 
-<Image
-  src="/images/kero-modular-server-engine/architecture.webp"
-  alt="Architecture"
-/>
+<Image src={architectureImage} />
 
 The diagram above illustrates an example of the overall architecture of the server engine. It shows which modules each thread possesses within a single server process and how these modules relate to each other.  
 Blue represents modules within `kero/engine`, and purple represents only the ActorSystem communication structure among `kero/engine` modules.  
@@ -87,10 +91,7 @@ class Service {
 
 In the service's constructor, `ServiceKindIds` of dependent services are stored as a list. When the `Run` function of the `Runner` (hereinafter Runner) class is called, it traverses the dependency service graph by calling the `GetDependencyDeclarations()` method of the services it owns. The diagram below shows an example of inter-service dependency structure.
 
-<Image
-  src="/images/kero-modular-server-engine/service-traverse.png"
-  alt="Service Traverse"
-/>
+<Image src={serviceTraverseImage} />
 
 - A depends on B and D.
 - B depends on C and D.
@@ -131,10 +132,7 @@ As a result, the Runner delegates the creation and access of dependent services,
 
 While the guaranteed initialization order of dependent services feature solved this problem, traversing the dependency service graph can lead to infinite recursion if a circular reference occurs. The diagram below shows an example of a circular reference.
 
-<Image
-  src="/images/kero-modular-server-engine/service-traverse-circular.png"
-  alt="Service Traverse Circular"
-/>
+<Image src={serviceTraverseCircularImage} />
 
 - A depends on B.
 - B depends on C.
@@ -165,10 +163,7 @@ In such cases, the user must resolve this circular reference between services. T
 
 First, split some of the functionality of the service where the cycle occurred. The diagram below shows an example of a solution using service splitting.
 
-<Image
-  src="/images/kero-modular-server-engine/service-traverse-circular-resolve.png"
-  alt="Service Traverse Circular Resolve"
-/>
+<Image src={serviceTraverseCircularResolve} />
 
 - A depends on B.
 - B depends on C.
@@ -235,17 +230,11 @@ The Actor System is one of the inter-thread communication methods. The advantage
 
 #### Structure and Operating Principle
 
-<Image
-  src="/images/kero-modular-server-engine/actor-system.png"
-  alt="Actor System"
-/>
+<Image src={actorSystemImage} />
 
 The diagram above shows the relational structure between the Actor System and ActorService (hereinafter Actor Service). It consists of an Actor System thread and Runner threads. The Actor Service within the Runner thread was implemented as a Runner's service. The Actor System and Actor Service have a 1:N relationship.
 
-<Image
-  src="/images/kero-modular-server-engine/actor-system-spsc.png"
-  alt="Actor System SPSC"
-/>
+<Image src={actorSystemSpscImage} />
 
 The diagram above illustrates the implementation using SPSC queues between the Actor Service and the Actor System. `Tx` -> `Rx` represents one SPSC queue. Communication between Actor Services occurs through SPSC queues mediated by the Actor System.
 
@@ -269,7 +258,7 @@ Therefore, I devised a method that can process logging asynchronously and non-bl
 
 #### Structure
 
-<Image src="/images/kero-modular-server-engine/log.png" alt="Log" />
+<Image src={logImage} />
 
 The diagram above shows the structure of the logging system. `LocalContext` (hereinafter Local Context) is the Tx of the SPSC queue in `thread local`. `GlobalContext` (hereinafter Global Context) is the set of Rxs of the SPSC queue.
 
@@ -459,7 +448,7 @@ If there are two or more sockets, they are unregistered to be moved to another t
 
 Then, the two sockets are passed to the battle thread with the fewest sockets, and a `battle_start` event is also sent. The diagram below illustrates the event flow between the battle thread and the lobby thread.
 
-<Image src="/images/kero-modular-server-engine/rpsls.png" alt="RPSLS" />
+<Image src={rpslsImage} />
 
 The battle thread registers the sockets and sends the `battle_start` event to the players.
 
