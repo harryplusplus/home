@@ -15,4 +15,26 @@ const { src } = Astro.props;
 const alt = getAltFromSrc(src.src);
 ---
 
-<Base src={src} alt={alt} layout="constrained" } />
+<Base
+  id={src.src}
+  src={src}
+  alt={alt}
+  layout="constrained"
+  }
+  style={{
+    "max-width": "100%",
+    height: "auto",
+    cursor: "pointer",
+  }}
+  data-src={src.src}
+/>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll<HTMLElement>("[data-src]").forEach((el) => {
+      el.addEventListener("click", () => {
+        window.open(el.dataset.src, "_blank");
+      });
+    });
+  });
+</script>
