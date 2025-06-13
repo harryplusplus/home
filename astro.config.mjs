@@ -18,8 +18,8 @@ export default defineConfig({
     fonts: [
       {
         provider: fontProviders.google(),
-        name: "EB Garamond",
-        cssVariable: "--font-eb-garamond",
+        name: "Roboto",
+        cssVariable: "--font-roboto",
         weights: [400, 700],
       },
     ],

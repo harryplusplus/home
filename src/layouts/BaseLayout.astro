@@ -20,7 +20,7 @@ const { title } = Astro.props;
     <title>
       {`${title} | Harry H. Kim`}
     </title>
-    <Font cssVariable="--font-eb-garamond" preload />
+    <Font cssVariable="--font-roboto" , preload />
     <Analytics />
     <SpeedInsights />
   </head>
@@ -33,13 +33,19 @@ const { title } = Astro.props;
   </body>
 </html>
 
-<style>
+<style is:global>
   body {
     background-color: #fdf6e3;
-    font-family: var(--font-eb-garamond);
+    font-family: var(--font-roboto);
     font-weight: 400;
     max-width: 672px;
     margin: 0 auto;
     padding: 20px;
+  }
+
+  p,
+  li {
+    font-size: 1rem;
+    line-height: calc(1.5 / 1);
   }
 </style>
