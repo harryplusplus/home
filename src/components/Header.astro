@@ -1,8 +1,5 @@
 ---
-let currentPath = Astro.url.pathname;
-if (currentPath.endsWith("/") && currentPath !== "/") {
-  currentPath = currentPath.slice(0, -1);
-}
+
 ---
 
 <header>
@@ -32,7 +29,6 @@ if (currentPath.endsWith("/") && currentPath !== "/") {
     text-decoration: underline;
   }
 
-  /* ★★★ 활성화된 링크에만 밑줄 표시 ★★★ */
   nav a.active {
     text-decoration: underline;
   }
