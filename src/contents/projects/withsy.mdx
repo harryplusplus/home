@@ -9,3 +9,17 @@ description: "Withsy is a user-centric AI chat application that empowers you to 
 https://withsy.chat/
 
 🚧 TODO
+
+## Architecture
+
+```mermaid
+sequenceDiagram
+actor br as Browser
+box Server
+  participant ap as API
+  participant wo as Worker
+end
+
+br->>ap: Send message
+
+```
