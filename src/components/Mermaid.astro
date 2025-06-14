@@ -1,0 +1,16 @@
+---
+type Props = {
+  chart: string;
+};
+
+const { chart } = Astro.props;
+---
+
+<pre class="mermaid">{chart}</pre>
+
+<script>
+  import mermaid from "mermaid";
+
+  mermaid.initialize({ startOnLoad: true });
+  mermaid.registerIconPacks([]);
+</script>

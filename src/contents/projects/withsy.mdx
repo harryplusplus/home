@@ -4,6 +4,8 @@ pubDate: 2025-05-19
 description: "Withsy is a user-centric AI chat application that empowers you to tailor your conversational experience. It provides robust features for managing prompts, customizing interactions, and securely saving your valuable chats and messages."
 ---
 
+import Mermaid from "@/components/Mermaid.astro";
+
 # {frontmatter.title}
 
 https://withsy.chat/
@@ -12,7 +14,7 @@ https://withsy.chat/
 
 ## Architecture
 
-```mermaid
+<Mermaid chart={`
 architecture-beta
     group api(logos:aws-lambda)[API]
 
@@ -25,4 +27,4 @@ architecture-beta
     disk1:T -- B:server
     disk2:T -- B:db
 
-```
+`} />
