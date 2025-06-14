@@ -13,17 +13,15 @@
 </header>
 
 <style>
-  @reference "tailwindcss";
-
-  header {
-    @apply mb-2;
-  }
-
-  nav {
-    @apply space-x-2;
-  }
-
   nav a {
-    @apply hover:underline;
+    margin-right: 10px;
+  }
+
+  nav a:last-child {
+    margin-right: 0;
+  }
+
+  nav a:hover {
+    text-decoration: underline;
   }
 </style>
