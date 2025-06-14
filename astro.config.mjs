@@ -19,6 +19,7 @@ export default defineConfig({
         name: "Roboto",
         cssVariable: "--font-roboto",
         weights: [400, 700],
+        display: "block",
       },
     ],
   },
