@@ -71,10 +71,6 @@
     "editor.insertSpaces": true,
     "editor.tabSize": 2
   },
-  "[tailwindcss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
   "errorLens.enabled": true,
   "files.associations": {
     "*.css": "tailwindcss"
