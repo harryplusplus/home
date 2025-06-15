@@ -3,7 +3,7 @@
 ---
 
 <header>
-  <nav>
+  <nav class="flex gap-4">
     <a href="/">Home</a>
     <a href="/#blog">Blog</a>
     <a href="/#projects">Projects</a>
@@ -14,21 +14,8 @@
 
 <style>
   nav a {
-    margin-right: 10px;
-    text-decoration: none;
-    color: inherit;
-    border-bottom: 2px solid transparent;
-  }
-
-  nav a:last-child {
-    margin-right: 0;
-  }
-
-  nav a:hover {
-    text-decoration: underline;
-  }
-
-  nav a.active {
-    text-decoration: underline;
+    @apply no-underline;
+    @apply hover:underline;
+    @apply active:underline;
   }
 </style>

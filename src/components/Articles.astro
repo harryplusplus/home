@@ -8,18 +8,17 @@ type Props = {
 
 const { collection } = Astro.props;
 
-const articles = await getCollection(collection);
-const sortedArticles = articles.sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+const articles = (await getCollection(collection)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
 );
 ---
 
 <section>
   {
-    sortedArticles.map((x) => (
+    articles.map((x) => (
       <>
         <article>
-          <a href={`/${collection}/${x.id}`} class="article-link">
+          <a href={`/${collection}/${x.id}`} class="block no-underline">
             <h3>{x.data.title}</h3>
             <p>
               <small>
@@ -40,25 +39,7 @@ const sortedArticles = articles.sort(
 </section>
 
 <style>
-  section {
-    margin-top: 20px;
-  }
-
   article:hover h3 {
     text-decoration-line: underline;
-  }
-
-  .article-link {
-    text-decoration: none;
-    display: block;
-    color: inherit;
-  }
-
-  p {
-    margin: auto;
-  }
-
-  h3 {
-    margin: auto;
   }
 </style>
