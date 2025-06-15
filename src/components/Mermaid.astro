@@ -34,4 +34,15 @@ const { chart } = Astro.props;
       icons: withsyIcons,
     },
   ]);
+
+  const elems = document.querySelectorAll<HTMLElement>(".mermaid");
+  elems.forEach((elem) => {
+    elem.style.display = "contents";
+  });
 </script>
+
+<style>
+  .mermaid {
+    display: none;
+  }
+</style>
