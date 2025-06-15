@@ -7,7 +7,7 @@ const { chart } = Astro.props;
 ---
 
 <pre class="mermaid">{chart}</pre>
-<p class="loading">Loading...</p>
+<p class="mermaid-loading">Loading...</p>
 
 <script>
   import mermaid from "mermaid";
@@ -40,7 +40,7 @@ const { chart } = Astro.props;
     x.style.display = "contents";
   });
 
-  document.querySelectorAll<HTMLElement>(".loading").forEach((x) => {
+  document.querySelectorAll<HTMLElement>(".mermaid-loading").forEach((x) => {
     x.style.display = "none";
   });
 </script>
@@ -50,7 +50,7 @@ const { chart } = Astro.props;
     display: none;
   }
 
-  .loading {
+  .mermaid-loading {
     display: contents;
   }
 </style>

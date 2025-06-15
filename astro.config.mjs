@@ -1,6 +1,7 @@
 // @ts-check
 import mdx from "@astrojs/mdx";
 import vercel from "@astrojs/vercel";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, fontProviders } from "astro/config";
 import remarkToc from "remark-toc";
 
@@ -22,5 +23,8 @@ export default defineConfig({
         display: "block",
       },
     ],
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
 });
