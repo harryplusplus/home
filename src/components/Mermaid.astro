@@ -36,12 +36,12 @@ const { chart } = Astro.props;
     },
   ]);
 
-  document.querySelectorAll<HTMLElement>(".mermaid").forEach((elem) => {
-    elem.style.display = "contents";
+  document.querySelectorAll<HTMLElement>(".mermaid").forEach((x) => {
+    x.style.display = "contents";
   });
 
-  document.querySelectorAll<HTMLElement>(".loading").forEach((elem) => {
-    elem.style.display = "none";
+  document.querySelectorAll<HTMLElement>(".loading").forEach((x) => {
+    x.style.display = "none";
   });
 </script>
 
