@@ -22,14 +22,14 @@ const articles = (await getCollection(collection)).sort(
           class="block no-underline hover:underline"
         >
           <h2 class="mb-0">{x.data.title}</h2>
-          <p class="text-right text-sm">
+          <p class="mb-0 text-right text-sm">
             {x.data.pubDate.toLocaleDateString(undefined, {
               year: "numeric",
               month: "long",
               day: "numeric",
             })}
           </p>
-          <p>{x.data.description || ""}</p>
+          <p class="mt-0">{x.data.description || ""}</p>
         </a>
       </article>
     ))
