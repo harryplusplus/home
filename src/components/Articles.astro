@@ -21,15 +21,15 @@ const articles = (await getCollection(collection)).sort(
           href={`/${collection}/${x.id}`}
           class="block no-underline hover:underline"
         >
-          <h2 class="m-auto">{x.data.title}</h2>
-          <p class="m-auto text-right text-sm">
+          <h2 class="mb-0">{x.data.title}</h2>
+          <p class="text-right text-sm">
             {x.data.pubDate.toLocaleDateString(undefined, {
               year: "numeric",
               month: "long",
               day: "numeric",
             })}
           </p>
-          <p class=m-auto">{x.data.description || ""}</p>
+          <p>{x.data.description || ""}</p>
         </a>
       </article>
     ))
