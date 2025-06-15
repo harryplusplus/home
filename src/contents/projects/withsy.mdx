@@ -8,21 +8,37 @@ import Mermaid from "@/components/Mermaid.astro";
 
 # {frontmatter.title}
 
-https://withsy.chat/
+## Table of Contents
 
-🚧 TODO
+## What Is Withsy?
+
+{frontmatter.description}
+
+Try it through the [link](https://withsy.chat/).
 
 ## Architecture
 
 <Mermaid chart={`
 architecture-beta
-    group withsy(withsy:logo)[Withsy]
 
-    service db(aws:arch-amazon-rds-64)[Amazon RDS for Postgres] in withsy
-    service storage(supabase:supabase-logo-icon)[Supabase Storage] in withsy
-    service server(google-cloud:cloud-run)[Google Cloud Run] in withsy
+group withsy(withsy:logo)[Withsy]
 
-    server:R -- L:db
-    server:B -- T:storage
+service db(aws:arch-amazon-rds-64)[Amazon RDS for Postgres] in withsy
+service storage(supabase:supabase-logo-icon)[Supabase Storage] in withsy
+service server(google-cloud:cloud-run)[Google Cloud Run] in withsy
 
+server:R -- L:db
+server:B -- T:storage
 `}/>
+
+### Why Use Google Cloud Run?
+
+TODO
+
+### Why Use Amazon RDS for Postgres?
+
+TODO
+
+### Why Use Supabase Storage?
+
+TODO
