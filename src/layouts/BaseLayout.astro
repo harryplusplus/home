@@ -26,12 +26,18 @@ const { title } = Astro.props;
     <SpeedInsights />
   </head>
   <body
-    class="prose w-2xl bg-[#fdf6e3] font-(family-name:--font-roboto) text-lg font-normal antialiased"
+    class="bg-[#fdf6e3] font-(family-name:--font-roboto) text-base antialiased"
   >
-    <Header />
-    <main>
-      <slot />
-    </main>
+    <div class="flex justify-center">
+      <div class="prose w-full max-w-2xl">
+        <Header />
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <main class="prose w-full max-w-2xl">
+        <slot />
+      </main>
+    </div>
     <footer></footer>
   </body>
 </html>
