@@ -10,7 +10,28 @@ const { chart } = Astro.props;
 
 <script>
   import mermaid from "mermaid";
+  import awsIcons from "@/icons/aws.json";
+  import googleCloudIcons from "@/icons/google-cloud.json";
+  import supabaseIcons from "@/icons/supabase.json";
+  import withsyIcons from "@/icons/withsy.json";
 
   mermaid.initialize({ startOnLoad: true });
-  mermaid.registerIconPacks([]);
+  mermaid.registerIconPacks([
+    {
+      name: awsIcons.prefix,
+      icons: awsIcons,
+    },
+    {
+      name: googleCloudIcons.prefix,
+      icons: googleCloudIcons,
+    },
+    {
+      name: supabaseIcons.prefix,
+      icons: supabaseIcons,
+    },
+    {
+      name: withsyIcons.prefix,
+      icons: withsyIcons,
+    },
+  ]);
 </script>

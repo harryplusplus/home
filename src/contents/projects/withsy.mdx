@@ -13,3 +13,16 @@ https://withsy.chat/
 🚧 TODO
 
 ## Architecture
+
+<Mermaid chart={`
+architecture-beta
+    group withsy(withsy:logo)[Withsy]
+
+    service db(aws:arch-amazon-rds-64)[Amazon RDS for Postgres] in withsy
+    service storage(supabase:supabase-logo-icon)[Supabase Storage] in withsy
+    service server(google-cloud:cloud-run)[Google Cloud Run] in withsy
+
+    server:R -- L:db
+    server:B -- T:storage
+
+`}/>
