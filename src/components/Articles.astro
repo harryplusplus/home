@@ -22,7 +22,7 @@ const articles = (await getCollection(collection)).sort(
           class="block no-underline hover:underline"
         >
           <h2 class="mb-0">{x.data.title}</h2>
-          <p class="mb-0 text-right text-sm">
+          <p class="mb-0 text-sm">
             {x.data.pubDate.toLocaleDateString(undefined, {
               year: "numeric",
               month: "long",
