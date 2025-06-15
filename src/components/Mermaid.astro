@@ -6,8 +6,8 @@ type Props = {
 const { chart } = Astro.props;
 ---
 
-<pre class="mermaid">{chart}</pre>
-<p class="loading">Loading...</p>
+<pre class="mermaid hidden">{chart}</pre>
+<p class="mermaid-loading contents">Loading...</p>
 
 <script>
   import mermaid from "mermaid";
@@ -40,17 +40,7 @@ const { chart } = Astro.props;
     x.style.display = "contents";
   });
 
-  document.querySelectorAll<HTMLElement>(".loading").forEach((x) => {
+  document.querySelectorAll<HTMLElement>(".mermaid-loading").forEach((x) => {
     x.style.display = "none";
   });
 </script>
-
-<style>
-  .mermaid {
-    display: none;
-  }
-
-  .loading {
-    display: contents;
-  }
-</style>

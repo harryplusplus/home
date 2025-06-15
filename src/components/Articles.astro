@@ -8,57 +8,30 @@ type Props = {
 
 const { collection } = Astro.props;
 
-const articles = await getCollection(collection);
-const sortedArticles = articles.sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+const articles = (await getCollection(collection)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
 );
 ---
 
 <section>
   {
-    sortedArticles.map((x) => (
-      <>
-        <article>
-          <a href={`/${collection}/${x.id}`} class="article-link">
-            <h3>{x.data.title}</h3>
-            <p>
-              <small>
-                {x.data.pubDate.toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </small>
-            </p>
-            {x.data.description ? <p>{x.data.description}</p> : null}
-          </a>
-        </article>
-        <br />
-      </>
+    articles.map((x) => (
+      <article>
+        <a
+          href={`/${collection}/${x.id}`}
+          class="block no-underline hover:underline"
+        >
+          <h2 class="mb-0">{x.data.title}</h2>
+          <p class="mb-0 text-right text-sm">
+            {x.data.pubDate.toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+          <p class="mt-0">{x.data.description || ""}</p>
+        </a>
+      </article>
     ))
   }
 </section>
-
-<style>
-  section {
-    margin-top: 20px;
-  }
-
-  article:hover h3 {
-    text-decoration-line: underline;
-  }
-
-  .article-link {
-    text-decoration: none;
-    display: block;
-    color: inherit;
-  }
-
-  p {
-    margin: auto;
-  }
-
-  h3 {
-    margin: auto;
-  }
-</style>
