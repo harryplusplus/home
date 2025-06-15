@@ -16,30 +16,22 @@ const articles = (await getCollection(collection)).sort(
 <section>
   {
     articles.map((x) => (
-      <>
-        <article>
-          <a href={`/${collection}/${x.id}`} class="block no-underline">
-            <h3>{x.data.title}</h3>
-            <p>
-              <small>
-                {x.data.pubDate.toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </small>
-            </p>
-            {x.data.description ? <p>{x.data.description}</p> : null}
-          </a>
-        </article>
-        <br />
-      </>
+      <article>
+        <a
+          href={`/${collection}/${x.id}`}
+          class="block no-underline hover:underline"
+        >
+          <h3>{x.data.title}</h3>
+          <p>{x.data.description || ""}</p>
+          <p class="text-right text-sm">
+            {x.data.pubDate.toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+        </a>
+      </article>
     ))
   }
 </section>
-
-<style>
-  article:hover h3 {
-    @apply underline;
-  }
-</style>
