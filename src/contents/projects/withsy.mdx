@@ -91,7 +91,7 @@ server:B -- T:storage
 
 하지만 프론트엔드와 백엔드를 하나의 서버에서 동작시킨 것이 아쉬운 부분도 있었습니다.
 개발 중에는 발생하지 않았지만 번들링으로 인해 프로덕션에서 Zod 객체가 순환 참조되면서 런타임 오류를 발생시켰습니다.
-번들러로 인해 Minification이 적용됐고, Next.js 15 이상에서 Minification을 끄는 옵션이 없어졌습니다. [(link)](https://nextjs.org/docs/architecture/nextjs-compiler#minification)
+번들러로 인해 Minification이 적용됐고, Next.js 15 이상에서 Minification을 끄는 옵션이 없어졌습니다. ([link](https://nextjs.org/docs/architecture/nextjs-compiler#minification))
 당시에 Minification된 오류 콜스택으로 원인 파악에 어려움이 있었고 코드를 하나씩 되돌리며 이슈를 해결했습니다.
 
 TODO: Next.js 15 미니피케이션된거 콜스택 볼 수 있는지 확인
