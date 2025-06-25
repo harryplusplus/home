@@ -92,9 +92,11 @@ server:B -- T:storage
 하지만 프론트엔드와 백엔드를 하나의 서버에서 동작시킨 것이 아쉬운 부분도 있었습니다.
 개발 중에는 발생하지 않았지만 번들링으로 인해 프로덕션에서 Zod 객체가 순환 참조되면서 런타임 오류를 발생시켰습니다.
 번들러로 인해 Minification이 적용됐고, Next.js 15 이상에서 Minification을 끄는 옵션이 없어졌습니다. ([link](https://nextjs.org/docs/architecture/nextjs-compiler#minification))
-당시에 Minification된 오류 콜스택으로 원인 파악에 어려움이 있었고 코드를 하나씩 되돌리며 이슈를 해결했습니다.
+Minification된 오류 콜스택으로 원인 파악에 어려움이 있었고 코드를 하나씩 되돌리며 이슈를 해결했습니다.
 
-TODO: Next.js 15 미니피케이션된거 콜스택 볼 수 있는지 확인
+결과적으로 하나의 모놀리스 서버를 구축하려고 했지만 Next.js 프레임워크가 번들러의 세부적인 옵션 제어를 불가능하게 만든 것 때문에 Next.js 프레임워크에 대한 저의 평가는 부정적이었습니다.
+실무에서 Next.js를 사용할 수 밖에 없는 상황이라면 백엔드 서버를 분리할 수 밖에 없을 것 같습니다.
+백엔드에서는 Minification보다는 문제해결을 위한 콜스택이 더 중요하기 때문입니다.
 
 ### Why Use Amazon RDS for Postgres?
 
