@@ -65,7 +65,7 @@ server:B -- T:storage
 특히 [요청 타임아웃](https://cloud.google.com/run/docs/configuring/request-timeout#timeout-period)이 최대 3600초입니다.
 반면에 [AWS App Runner의 요청 타임아웃](https://docs.aws.amazon.com/apprunner/latest/dg/develop.html)은 120초입니다.
 
-#### Why Use Monolith?
+#### Why Use Monolith Server?
 
 먼저 우리는 이 웹앱을 구축하기 위해서 Next.js 프레임워크를 선택했습니다.
 팀원 Jenn이 현업에서 다년간 Next.js를 사용했고, 그 동안 좋은 결과물을 만들었기 때문입니다.
@@ -99,8 +99,36 @@ Minification된 오류 콜스택으로 원인 파악에 어려움이 있었고 �
 
 ### Why Use Amazon RDS for Postgres?
 
-TODO
+Google Cloud Run을 사용한다면 Google Cloud SQL for Postgres을 사용하는 것이 좋다고 생각합니다.
+보안상 DB 접근을 Google Cloud 내부에서만 가능하도록 제한할 수 있기 때문입니다.
+보안상의 이유에도 불구하고 Amazon RDS for Postgres를 선택한 이유는 AWS Credit이 있었기 때문입니다.
+무료 서비스로 배포했기 때문에 갖고 있는 AWS Credit을 최대한 활용하고 싶었습니다.
+만약 유료 서비스로 배포한다면 보안상의 이점이 있는 Google Cloud SQL for Postgres를 사용할 것 같습니다.
+
+#### Why Use Postgres?
+
+Postgres는 다재다능한 데이터베이스입니다.
+기본적으로 관계형 데이터베이스의 특성을 따릅니다.
+하지만 비정형 데이터인 JSON/JSONB 타입을 활용해 NoSQL로 구성할 수 도 있습니다.
+그리고 Event Triggers를 사용해 이벤트 기반 아키텍처를 구축할 수 도 있습니다.
+특히 메시지 큐도 구현할 수 있고, 이미 Postgres를 사용하는 메시지 큐 구현들도 많습니다.
+
+Withsy에서는 사용자 데이터와 같은 정형 데이터는 테이블을 사용해 구현하고, 사용자의 커스텀 Preferences는 JSONB 타입을 사용해 저장했습니다.
+그리고 AI 채팅 요청은 Postgres를 사용한 메시지 큐 구현인 Graphile Workers를 사용해서 API 요청시 작업을 큐에 넣고 API 응답을 즉시 반환하도록 했습니다.
+AI API는 요청에 따라서 시간이 오래걸릴 수 도 있고, 실패시 내부적으로 재시도할 수 도 있기 때문입니다.
+
+이처럼 Postgres를 사용하면 특수한 목적의 DB를 사용하지 않을 수도 있습니다.
+물론 성능이나 효율성에 따라 특수한 목적의 DB가 필요할 수 도 있습니다.
+하지만 작은 팀의 초기 프로젝트에서 Postgres로 많은 기능을 처리하면, 인프라 관리의 복잡성이 낮아지기 때문에 Postgres로 최대한 가능한지 파악하는 것이 좋다고 생각합니다.
 
 ### Why Use Supabase Storage?
 
-TODO
+AI 모델마다 프로필 이미지를 저장할 수 있는 기능을 추가할 때, 파일 저장소 기능이 필요했습니다.
+이미지 파일은 Monolith 서버와 Postgres를 사용해서 저장하고 읽을 수 도 있습니다.
+하지만 이렇게 구현할 경우, egress 요금이 불필요하게 나올 수 있다고 생각합니다.
+Monolith 서버에서 Relay를 해야하기 때문입니다.
+
+반면에 AWS S3는 Presigned URL을 발급받을 수 있습니다.
+Presigned URL은 일시적으로 읽기 전용 URL을 생성할 수 있습니다.
+Presigned URL을 사용하면 서버에서 Relay를 할 필요가 없어집니다.
+그리고 Supabase Storage는 AWS S3 호환 파일 저장소를 지원합니다.
