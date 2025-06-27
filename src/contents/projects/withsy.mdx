@@ -128,12 +128,22 @@ AI 모델마다 프로필 이미지를 저장할 수 있는 기능을 추가할 
 그리고 Google Cloud Storage보다 AWS S3 또는 Supabase Storage가 더 저렴합니다.
 Supabase Storage는 AWS S3 API/SDK를 직접 사용할 수 있고 무료 티어가 있어서 Supabase Storage를 선택했습니다.
 
-## AI Chat Response Streaming
+## AI Chat Streaming
 
 ### Design
 
 AI 채팅시 브라우저에서 사용자가 메시지 전송 버튼을 클릭하면 서버를 통해 제 3자 AI API를 호출합니다.
-이 때
+이 때 브라우저에서는 메시지 전송과 응답 API를 별도로 호출합니다.
+왜냐하면 메시지 응답 API가 스트리밍이기 때문입니다.
+스트리밍하는 이유는 AI 응답은 몇 초 이상 걸릴 수 있는 작업이며 이 때 완료 후 응답 메시지를 한꺼번에 보내는 것보다 응답 메시지를 실시간으로 스트리밍하면 사용자 경험이 더 좋기 때문입니다.
+
+메시지 전송은 중복 요청시 불필요한 AI 응답 생성 및 요금으로 이어질 수 있기 때문에 멱등키를 사용해 중복 요청을 방지합니다.
+그리고 AI API 요청은 오래 걸릴 수 있기 때문에 비동기 작업으로 실행하고 메시지 전송 요청에 대한 응답을 즉시 반환합니다.
+
+메시지 응답은 몇 초 이상 걸릴 수 있고 네트워크 문제 등 여러 이유로 재요청이 발생할 수 있기 때문에 마찬가지로 멱등해야 합니다.
+스트리밍 API의 경우 재개를 제공해야하는 경우들도 있지만 응답 메시지 API는 하나의 메시지 요청마다 하나의 메시지 응답 형태이기 때문에 재개를 제공할 필요는 없다고 생각합니다.
+그래서 멱등하게 구현하기 위해 Worker에서 응답 메시지 청크를 먼저 DB에 저장합니다.
+그리고 메시지 응답 API에서는 DB에 저장된 응답 메시지 청크를 우선 스트리밍하고 나머지 응답 메시지 청크를 Postgres Events를 사용해 실시간으로 스트리밍합니다.
 
 ### Sequence Diagram
 
@@ -188,7 +198,7 @@ end
 end
 
 rect rgba(0, 0, 255, .05)
-Note right of us: Receive ai response
+Note right of us: Receive response message from AI
 
 us->>ap: Receive ai response
 ap->>db: Get message chunks
