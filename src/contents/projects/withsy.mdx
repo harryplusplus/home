@@ -199,10 +199,9 @@ rect rgba(0, 0, 255, .05)
 Note right of us: Receive response message from AI
 
 us->>ap: Receive ai response
+ap->>ev: Listen message chunk event
 ap->>db: Get message chunks
 db-->>ap: message chunks
-
-ap->>ev: Listen message chunk event
 
 loop Saved message chunk is done
 ap-->>us: message chunk
