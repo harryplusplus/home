@@ -124,11 +124,86 @@ AI API는 요청에 따라서 시간이 오래걸릴 수 도 있고, 실패시 �
 ### Why Use Supabase Storage?
 
 AI 모델마다 프로필 이미지를 저장할 수 있는 기능을 추가할 때, 파일 저장소 기능이 필요했습니다.
-이미지 파일은 Monolith 서버와 Postgres를 사용해서 저장하고 읽을 수 도 있습니다.
-하지만 이렇게 구현할 경우, egress 요금이 불필요하게 나올 수 있다고 생각합니다.
-Monolith 서버에서 Relay를 해야하기 때문입니다.
+이미지 파일을 저장할 때 Postgres에 저장하는 것보다는 S3와 같은 Storage 서비스를 사용하는 것이 가격이 저렴합니다.
+그리고 Google Cloud Storage보다 AWS S3 또는 Supabase Storage가 더 저렴합니다.
+Supabase Storage는 AWS S3 API/SDK를 직접 사용할 수 있고 무료 티어가 있어서 Supabase Storage를 선택했습니다.
 
-반면에 AWS S3는 Presigned URL을 발급받을 수 있습니다.
-Presigned URL은 일시적으로 읽기 전용 URL을 생성할 수 있습니다.
-Presigned URL을 사용하면 서버에서 Relay를 할 필요가 없어집니다.
-그리고 Supabase Storage는 AWS S3 호환 파일 저장소를 지원합니다.
+## AI Chat Response Streaming
+
+### Design
+
+AI 채팅시 브라우저에서 사용자가 메시지 전송 버튼을 클릭하면 서버를 통해 제 3자 AI API를 호출합니다.
+이 때
+
+### Sequence Diagram
+
+<Mermaid chart={`
+sequenceDiagram
+
+actor us as User
+
+box Server
+participant ap as API
+participant wo as Worker
+end
+
+box Postgres
+participant db as DB
+participant q as Queue in DB
+participant ev as Events in DB
+end
+
+participant ai as AI
+
+rect rgba(0, 0, 255, .05)
+Note right of us: Send message to AI
+
+us->>+ap: Send message to AI
+ap->>+db: Create message
+db-->>-ap: message_id
+ap->>q: Enqueue "send to ai" task
+ap-->>-us: message_id
+end
+
+rect rgba(0, 0, 255, .05)
+Note right of us: Process AI response
+
+loop Listen or pull task
+
+wo->>+q: Dequeue task
+q-->>-wo: task
+wo->>+db: Get history
+db-->>-wo: history
+wo->>ai: Create response stream
+
+loop Until response is done
+ai-->>wo: Send response chunk
+wo->>db: Create message chunk
+db-->>wo: message_chunk_id
+wo->>ev: Notify message chunk event
+end
+
+end
+
+end
+
+rect rgba(0, 0, 255, .05)
+Note right of us: Receive ai response
+
+us->>ap: Receive ai response
+ap->>db: Get message chunks
+db-->>ap: message chunks
+
+ap->>ev: Listen message chunk event
+
+loop Saved message chunk is done
+ap-->>us: message chunk
+end
+
+loop Message chunk event is done
+ev-->>ap: message chunk event
+ap-->>us: message chunk
+end
+
+end
+`}/>
