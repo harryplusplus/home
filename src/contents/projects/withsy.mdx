@@ -16,6 +16,18 @@ import Mermaid from "@/components/Mermaid.astro";
 
 Try it through the [link](https://withsy.chat/).
 
+## Why We Created This?
+
+Withsy was created by two software engineers, myself and [Jenn](https://www.hellojennpark.com/).
+
+While the market is flooded with AI chat apps, we found none were built for our specific use case. For example, if we didn't like an answer from Google Gemini and wanted to ask xAI Grok, we had to transfer the entire conversation context, which was an inconvenient and tedious process.
+
+To solve this, we built a feature that allows users to seamlessly transfer conversational context or branch off conversations to multiple AIs from a single chat app.
+
+We also noticed a lack of a bookmarking feature to easily save specific questions or answers for future reference and instantly jump back to that context.
+
+That's why we built Withsy.
+
 ## Architecture
 
 <Mermaid chart={`
@@ -33,12 +45,146 @@ server:B -- T:storage
 
 ### Why Use Google Cloud Run?
 
-TODO
+Our service is an AI chat web app. In addition to a typical web and REST API, it provides AI response streaming using SSE (Server-Sent Events) and executes third-party AI API requests as background tasks.
+
+I place a high value on maintaining similarity between our production and development environments, which is why I prefer a Docker container-based environment.
+
+Recently, many serverless platforms use their own specific JavaScript runtimes instead of standard Node.js runtimes. I believe these platforms are better suited for optimizing large-scale services rather than for use by small teams. This is because such platforms introduce a larger gap between the development and production environments compared to Docker-based platforms. While they offer cost savings through per-request scaling and computing resource optimization and high stability due to their managed runtimes, this is a form of premature optimization.
+
+For a new project run by a small team, this can be inefficient. It introduces unnecessary constraints that require us to invest more time and technical resources to comply with them.
+
+We also prioritized a managed platform that supports zero-downtime deployment and automatic scaling. As a small team, we wanted to avoid the time and mental resources required to manage Kubernetes.
+
+Google Cloud Run was the perfect fit, meeting all these requirements. It is a managed platform that supports zero-downtime deployment, auto-scaling, and a Docker container-based environment.
+
+A key advantage for us is its generous request timeout of up to [3600 seconds](https://cloud.google.com/run/docs/configuring/request-timeout#timeout-period). In contrast, AWS App Runner has a request timeout of only [120 seconds](https://docs.aws.amazon.com/apprunner/latest/dg/develop.html).
+
+#### Why Use Monolith Server?
+
+First, we chose the Next.js framework to build our web app. My teammate, Jenn, has used Next.js for many years in her professional career and has created excellent results with it. I also consider Next.js a production-ready framework, having seen it used by various companies.
+
+However, I wanted to avoid the modern Node.js web app architecture of using a "Backend for Frontend" and a separate "Backend for Backend." For a small team and a new project, developing and operating two separate services from the start is an unnecessary cost. It requires deploying two services in production, which can potentially double our hosting fees.
+
+This architecture also requires maintaining a separate interface package between the frontend and backend, naturally leading to the adoption of a monorepo. While these are good technologies to use when needed, I believe they are unnecessary for our current stage.
+
+Furthermore, a microservice architecture creates a deployment order dependency. The backend must be deployed before the frontend to prevent users from requesting a REST API that doesn't yet exist.
+
+For these reasons, we also handle background jobs on the same server. Separating these services would introduce the same issues of interface maintenance and deployment dependencies.
+
+Ultimately, we decided to handle the frontend, backend, and background jobs within a single repository and on a single server. This approach keeps our development stack and infrastructure lightweight, allowing us to focus on the core business logic.
+
+However, running the frontend and backend on a single server wasn't without its challenges. Although it didn't occur during development, a circular reference in a Zod object caused a runtime error in production due to bundling. Because minification was applied by the bundler, the error's call stack was difficult to read. [Next.js versions 15 and higher have removed the option to disable minification](https://nextjs.org/docs/architecture/nextjs-compiler#minification), making it harder to debug. To solve the issue, we had to revert code changes one by one.
+
+Later, while checking the Next.js source code, we found that the `experimental.serverMinification` option in `next.config.ts` controls webpack's `optimization.minimize`. This setting was not in the official documentation. The fact that Next.js hides low-level controls in favor of high-level settings was a frustrating discovery.
 
 ### Why Use Amazon RDS for Postgres?
 
-TODO
+If we were using Google Cloud Run, it would be ideal to use Google Cloud SQL for Postgres. This is because we could restrict database access to Google Cloud's internal network, providing a significant security benefit.
+
+Despite this security advantage, we chose Amazon RDS for Postgres because we had existing AWS credits. Since our service was deployed for free, we wanted to make the most of the credits we had.
+
+If we were to deploy a paid service in the future, we would likely use Google Cloud SQL for Postgres due to its security benefits.
+
+#### Why Use Postgres?
+
+Postgres is an incredibly versatile database. While it follows the principles of a relational database, you can also use it as a NoSQL database by leveraging unstructured data types like JSON/JSONB. Additionally, it can be used to build an event-driven architecture using event triggers, and it can even function as a message queue, a role it already fulfills for many existing implementations.
+
+In Withsy, we used Postgres to its full potential:
+
+- We implemented structured data like user information using standard tables.
+- We stored unstructured data, such as user preferences, using the JSONB type.
+- For AI chat requests, we used a Postgres-based message queue implementation called Graphile Workers. This approach allows us to immediately return an API response by queuing the job, which is important because AI API requests can be time-consuming or might require internal retries upon failure.
+
+Using Postgres allows us to avoid a specialized database for every different purpose. Of course, a specialized database may be necessary later for performance or efficiency reasons. However, for an initial project with a small team, it's best to see how many functions Postgres can handle to keep infrastructure management as simple as possible.
 
 ### Why Use Supabase Storage?
 
-TODO
+When we added the feature to store profile images for each AI model, we needed a file storage solution. Storing image files in Postgres is less cost-effective than using a dedicated storage service like S3.
+
+We found that AWS S3 and Supabase Storage are more affordable than Google Cloud Storage. We ultimately chose Supabase Storage because it has a generous free tier and is directly compatible with the AWS S3 API/SDK.
+
+## AI Chat Streaming Design
+
+When a user clicks the send button in the browser, a request is sent to our server, which then calls a third-party AI API. The browser makes two separate API calls: one to send the message and another to receive the response. The response API is a streaming API. This is because AI responses can take several seconds to generate, and streaming the response in real time provides a much better user experience than sending the entire message at once after it's complete.
+
+To prevent unnecessary AI responses and associated costs, the message send API uses an idempotency key to guard against duplicate requests. Since the AI API request can be a long-running task, it is executed as an asynchronous job, and the response to the message send request is returned immediately.
+
+The message response API must also be idempotent, as re-requests can occur due to network issues. Here's how our streaming process works:
+
+1. A worker saves each AI response chunk to the database.
+2. The message response API first streams any response chunks that have already been saved to the database.
+3. It then streams any remaining chunks in real time using Postgres Events.
+
+While some streaming APIs need to support resumption, we believe it's unnecessary for our response message API. Each message request corresponds to a single, unique message response, so there is no need for a resume feature.
+
+### Sequence Diagram
+
+<Mermaid chart={`
+sequenceDiagram
+
+actor us as User
+
+box Server
+participant ap as API
+participant wo as Worker
+end
+
+box Postgres
+participant db as DB
+participant q as Queue in DB
+participant ev as Events in DB
+end
+
+participant ai as AI
+
+rect rgba(0, 0, 255, .05)
+Note right of us: Send message to AI
+
+us->>+ap: Send message to AI
+ap->>+db: Create message
+db-->>-ap: message_id
+ap->>q: Enqueue "send to ai" task
+ap-->>-us: message_id
+end
+
+rect rgba(0, 0, 255, .05)
+Note right of us: Process AI response
+
+loop Listen or pull task
+
+wo->>+q: Dequeue task
+q-->>-wo: task
+wo->>+db: Get history
+db-->>-wo: history
+wo->>ai: Create response stream
+
+loop Until response is done
+ai-->>wo: Send response chunk
+wo->>db: Create message chunk
+db-->>wo: message_chunk_id
+wo->>ev: Notify message chunk event
+end
+
+end
+
+end
+
+rect rgba(0, 0, 255, .05)
+Note right of us: Receive response message from AI
+
+us->>ap: Receive ai response
+ap->>ev: Listen message chunk event
+ap->>db: Get message chunks
+db-->>ap: message chunks
+
+loop Saved message chunk is done
+ap-->>us: message chunk
+end
+
+loop Message chunk event is done
+ev-->>ap: message chunk event
+ap-->>us: message chunk
+end
+
+end
+`}/>
